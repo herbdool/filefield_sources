@@ -224,7 +224,7 @@ function filefield_source_attach_value($element, &$item) {
 
     // Check that the destination is writable.
     $directory = $element['#upload_location'];
-    $mode = variable_get('file_chmod_directory', 0775);
+    $mode = config_get('file_chmod_directory', 0775);
 
     // This first chmod check is for other systems such as S3, which don't work
     // with file_prepare_directory().

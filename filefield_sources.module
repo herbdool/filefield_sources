@@ -307,7 +307,7 @@ function filefield_sources_field_value($element, &$item, &$form_state) {
  */
 function filefield_sources_invoke_all($method, &$params) {
   $return = array();
-  foreach (filefield_sources_includes() as $source) {
+  foreach (filefield_sources_includes(TRUE, TRUE, $params) as $source) {
     $function = 'filefield_source_' . $source . '_' . $method;
     if (function_exists($function)) {
       $result = call_user_func_array($function, $params);
@@ -384,15 +384,20 @@ function filefield_sources_filefield_sources_info() {
 /**
  * Load all the potential sources.
  */
-function filefield_sources_includes($include = TRUE, $enabled_only = TRUE) {
+function filefield_sources_includes($include = TRUE, $enabled_only = TRUE, $instance = NULL) {
   if ($enabled_only) {
-    $enabled_includes = variable_get('filefield_sources', filefield_sources_includes(FALSE, FALSE));
+    $enabled_includes = filefield_sources_includes(FALSE, FALSE);
+    // We need the instance in order to get the file this field's config file name.
+    if (!empty($instance) && is_array($instance[1])) {
+      $config_file = 'field.instance.' . $instance[1]['entity_type'] . '.' . $instance[1]['bundle'] . '.' . $instance[1]['field_name'];
+      $enabled_includes = config_get($config_file, 'filefield_sources');
+    }
   }
 
   $includes = array();
   $directory = drupal_get_path('module', 'filefield_sources') . '/sources';
   foreach (file_scan_directory($directory, '/\.inc$/') as $file) {
-    if (!$enabled_only || in_array($file->name, $enabled_includes)) {
+    if (!$enabled_only || (isset($enabled_includes) && in_array($file->name, $enabled_includes))) {
       $includes[] = $file->name;
       if ($include) {
         include_once(DRUPAL_ROOT . '/' . $file->uri);
@@ -481,7 +486,7 @@ function filefield_sources_save_file($filepath, $validators = array(), $destinat
   // rename filename.php.foo and filename.php to filename.php.foo.txt and
   // filename.php.txt, respectively). Don't rename if 'allow_insecure_uploads'
   // evaluates to TRUE.
-  if (!variable_get('allow_insecure_uploads', 0) && preg_match('/\.(php|pl|py|cgi|asp|js)(\.|$)/i', $file->filename) && (substr($file->filename, -4) != '.txt')) {
+  if (!config_get('allow_insecure_uploads', 0) && preg_match('/\.(php|pl|py|cgi|asp|js)(\.|$)/i', $file->filename) && (substr($file->filename, -4) != '.txt')) {
     $file->filemime = 'text/plain';
     $file->uri .= '.txt';
     $file->filename .= '.txt';

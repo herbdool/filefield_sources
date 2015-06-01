@@ -170,7 +170,7 @@ function filefield_sources_field_process($element, &$form_state, $form) {
   }
 
   // Add basic JS and CSS.
-  $path = drupal_get_path('module', 'filefield_sources');
+  $path = backdrop_get_path('module', 'filefield_sources');
   $element['#attached']['css'][] = $path . '/filefield_sources.css';
   $element['#attached']['js'][] = $path . '/filefield_sources.js';
 
@@ -178,7 +178,7 @@ function filefield_sources_field_process($element, &$form_state, $form) {
   foreach (element_children($element) as $key) {
     if (isset($element[$key]['#filefield_sources_hint_text']) && !isset($js_added[$key])) {
       $type = str_replace('filefield_', '', $key);
-      drupal_add_js(array('fileFieldSources' => array($type => array('hintText' => $element[$key]['#filefield_sources_hint_text']))), 'setting');
+      backdrop_add_js(array('fileFieldSources' => array($type => array('hintText' => $element[$key]['#filefield_sources_hint_text']))), 'setting');
       $js_added[$key] = TRUE;
     }
   }
@@ -190,7 +190,7 @@ function filefield_sources_field_process($element, &$form_state, $form) {
   if ($field['cardinality'] != 1) {
     $parents = array_slice($element['#array_parents'], 0, -1);
     $new_path = 'file/ajax/' . implode('/', $parents) . '/' . $form['form_build_id']['#value'];
-    $field_element = drupal_array_get_nested_value($form, $parents);
+    $field_element = backdrop_array_get_nested_value($form, $parents);
     $new_wrapper = $field_element['#id'] . '-ajax-wrapper';
     foreach (element_children($element) as $key) {
       foreach (element_children($element[$key]) as $subkey) {
@@ -252,7 +252,7 @@ function filefield_sources_field_validate($element, &$form_state, $form) {
 function filefield_sources_field_submit(&$form, &$form_state) {
 
   $parents = array_slice($form_state['triggering_element']['#array_parents'], 0, -3);
-  $element = drupal_array_get_nested_value($form, $parents);
+  $element = backdrop_array_get_nested_value($form, $parents);
   $field_name = $element['#field_name'];
   $langcode = $element['#language'];
 
@@ -260,7 +260,7 @@ function filefield_sources_field_submit(&$form, &$form_state) {
   // File Field items are stored in the field state after ajax reloads starting
   // from Drupal 7.8. We try to support all releases by merging the items.
   $field_state = field_form_get_state($element['#field_parents'], $field_name, $langcode, $form_state);
-  $field_values = drupal_array_get_nested_value($form_state['values'], $parents);
+  $field_values = backdrop_array_get_nested_value($form_state['values'], $parents);
 
   if (isset($field_values) && isset($field_state['items'])) {
     $field_values += $field_state['items'];
@@ -276,7 +276,7 @@ function filefield_sources_field_submit(&$form, &$form_state) {
     usort($field_values, '_field_sort_items_helper');
 
     // Update form_state values.
-    drupal_array_set_nested_value($form_state['values'], $parents, $field_values);
+    backdrop_array_set_nested_value($form_state['values'], $parents, $field_values);
 
     // Update items.
     $field_state['items'] = $field_values;
@@ -284,7 +284,7 @@ function filefield_sources_field_submit(&$form, &$form_state) {
   }
 
   // Clear out input as it will need to be rebuildt.
-  drupal_array_set_nested_value($form_state['input'], $element['#parents'], NULL);
+  backdrop_array_set_nested_value($form_state['input'], $element['#parents'], NULL);
   $form_state['rebuild'] = TRUE;
 }
 
@@ -327,7 +327,7 @@ function filefield_sources_invoke_all($method, &$params) {
  */
 function filefield_sources_info($include_default = TRUE) {
   // Cache the expensive part.
-  $cache = &drupal_static(__FUNCTION__, array());
+  $cache = &backdrop_static(__FUNCTION__, array());
   if (empty($cache)) {
     $cache['upload'] = array(
       'name' => t('Upload (default)'),
@@ -346,7 +346,7 @@ function filefield_sources_info($include_default = TRUE) {
       $cache += $additions;
     }
 
-    drupal_alter('filefield_sources_info', $cache);
+    backdrop_alter('filefield_sources_info', $cache);
     uasort($cache, '_filefield_sources_sort');
   }
 
@@ -395,12 +395,12 @@ function filefield_sources_includes($include = TRUE, $enabled_only = TRUE, $inst
   }
 
   $includes = array();
-  $directory = drupal_get_path('module', 'filefield_sources') . '/sources';
+  $directory = backdrop_get_path('module', 'filefield_sources') . '/sources';
   foreach (file_scan_directory($directory, '/\.inc$/') as $file) {
     if (!$enabled_only || (isset($enabled_includes) && in_array($file->name, $enabled_includes))) {
       $includes[] = $file->name;
       if ($include) {
-        include_once(DRUPAL_ROOT . '/' . $file->uri);
+        include_once(backdrop_ROOT . '/' . $file->uri);
       }
     }
   }
@@ -494,7 +494,7 @@ function filefield_sources_save_file($filepath, $validators = array(), $destinat
     // to add it here or else the file upload will fail.
     if (!empty($extensions)) {
       $validators['file_validate_extensions'][0] .= ' txt';
-      drupal_set_message(t('For security reasons, your upload has been renamed to %filename.', array('%filename' => $file->filename)));
+      backdrop_set_message(t('For security reasons, your upload has been renamed to %filename.', array('%filename' => $file->filename)));
     }
   }
 
@@ -506,7 +506,7 @@ function filefield_sources_save_file($filepath, $validators = array(), $destinat
   // Assert that the destination contains a valid stream.
   $destination_scheme = file_uri_scheme($destination);
   if (!$destination_scheme || !file_stream_wrapper_valid_scheme($destination_scheme)) {
-    drupal_set_message(t('The file could not be uploaded, because the destination %destination is invalid.', array('%destination' => $destination)), 'error');
+    backdrop_set_message(t('The file could not be uploaded, because the destination %destination is invalid.', array('%destination' => $destination)), 'error');
     return FALSE;
   }
 
@@ -522,7 +522,7 @@ function filefield_sources_save_file($filepath, $validators = array(), $destinat
   // If file_destination() returns FALSE then $replace == FILE_EXISTS_ERROR and
   // there's an existing file so we need to bail.
   if ($file->destination === FALSE) {
-    drupal_set_message(t('The file %source could not be uploaded because a file by that name already exists in the destination %directory.', array('%source' => $file->filename, '%directory' => $destination)), 'error');
+    backdrop_set_message(t('The file %source could not be uploaded because a file by that name already exists in the destination %directory.', array('%source' => $file->filename, '%directory' => $destination)), 'error');
     return FALSE;
   }
 
@@ -541,7 +541,7 @@ function filefield_sources_save_file($filepath, $validators = array(), $destinat
     else {
       $message .= ' ' . array_pop($errors);
     }
-    drupal_set_message($message, 'error');
+    backdrop_set_message($message, 'error');
     return FALSE;
   }
 
@@ -550,13 +550,13 @@ function filefield_sources_save_file($filepath, $validators = array(), $destinat
   // operations.
   $file->uri = $file->destination;
   if (!file_unmanaged_copy($filepath, $file->uri, $replace)) {
-    drupal_set_message(t('File upload error. Could not move uploaded file.'), 'error');
+    backdrop_set_message(t('File upload error. Could not move uploaded file.'), 'error');
     watchdog('file', 'Upload error. Could not move uploaded file %file to destination %destination.', array('%file' => $file->filename, '%destination' => $file->uri));
     return FALSE;
   }
 
   // Set the permissions on the new file.
-  drupal_chmod($file->uri);
+  backdrop_chmod($file->uri);
 
   // If we are replacing an existing file re-use its database record.
   if ($replace == FILE_EXISTS_REPLACE) {
@@ -603,7 +603,7 @@ function filefield_sources_clean_filename($filepath, $extensions) {
     $extensions = 'jpg jpeg gif png txt doc xls pdf ppt pps odt ods odp';
   }
   $filename = file_munge_filename($filename, $extensions);
-  $directory = drupal_dirname($filepath);
+  $directory = backdrop_dirname($filepath);
   return ($directory != '.' ? $directory . '/' : '') . $filename;
 }
 
@@ -715,5 +715,5 @@ function _filefield_sources_enabled($settings) {
   }
 
   $enabled = array_keys(array_filter($settings['filefield_sources']));
-  return drupal_map_assoc($enabled);
+  return backdrop_map_assoc($enabled);
 }

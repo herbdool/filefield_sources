@@ -14,7 +14,7 @@
  */
 function filefield_source_imce_info() {
   $source = array();
-
+  dpm('source_info');
   if (!module_exists('imce') || !imce_access()) {
     return $source;
   }
@@ -98,6 +98,7 @@ function filefield_source_imce_settings($op, $instance) {
  * A #process callback to extend the filefield_widget element type.
  */
 function filefield_source_imce_process($element, &$form_state, $form) {
+  dpm('test');
   $instance = field_widget_instance($element, $form_state);
 
   $element['filefield_imce'] = array(
@@ -187,7 +188,7 @@ function filefield_source_imce_value($element, &$item) {
 function theme_filefield_source_imce_element($variables) {
   $element = $variables['element'];
 
-  $output = drupal_render_children($element);;
+  $output = backdrop_render_children($element);;
   return '<div class="filefield-source filefield-source-imce clear-block">' . $output . '</div>';
 }
 
@@ -199,7 +200,7 @@ function filefield_source_imce_page($entity_type, $bundle_name, $field_name) {
 
   // Check access.
   if (!module_exists('imce') || !imce_access() || !$instance = field_info_instance($entity_type, $field_name, $bundle_name)) {
-    return drupal_access_denied();
+    return backdrop_access_denied();
   }
   $field = field_info_field($field_name);
 

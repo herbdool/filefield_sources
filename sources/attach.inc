@@ -78,7 +78,7 @@ function filefield_source_attach_settings($op, $instance) {
         1 => t('Absolute server path'),
       ),
       '#default_value' => $settings['source_attach']['absolute'],
-      '#description' => t('The <em>File attach path</em> may be with the files directory (%file_directory) or from the root of your server. If an absolute path is used and it does not start with a "/" your path will be relative to your site directory: %realpath.', array('%file_directory' => drupal_realpath(file_default_scheme() . '://'), '%realpath' => realpath('./'))),
+      '#description' => t('The <em>File attach path</em> may be with the files directory (%file_directory) or from the root of your server. If an absolute path is used and it does not start with a "/" your path will be relative to your site directory: %realpath.', array('%file_directory' => backdrop_realpath(file_default_scheme() . '://'), '%realpath' => realpath('./'))),
     );
     $return['source_attach']['attach_mode'] = array(
       '#type' => 'radios',
@@ -195,7 +195,7 @@ function filefield_source_attach_process($element, &$form_state, $form) {
 
 function _filefield_source_attach_options($path) {
   if (!file_prepare_directory($path, FILE_CREATE_DIRECTORY)) {
-    drupal_set_message(t('Specified file attach path must exist or be writable.'), 'error');
+    backdrop_set_message(t('Specified file attach path must exist or be writable.'), 'error');
     return FALSE;
   }
 
@@ -228,9 +228,9 @@ function filefield_source_attach_value($element, &$item) {
 
     // This first chmod check is for other systems such as S3, which don't work
     // with file_prepare_directory().
-    if (!drupal_chmod($directory, $mode) && !file_prepare_directory($directory, FILE_CREATE_DIRECTORY)) {
-      watchdog('file', 'File %file could not be copied, because the destination directory %destination is not configured correctly.', array('%file' => $filepath, '%destination' => drupal_realpath($directory)));
-      drupal_set_message(t('The specified file %file could not be copied, because the destination directory is not properly configured. This may be caused by a problem with file or directory permissions. More information is available in the system log.', array('%file' => $filepath)), 'error');
+    if (!backdrop_chmod($directory, $mode) && !file_prepare_directory($directory, FILE_CREATE_DIRECTORY)) {
+      watchdog('file', 'File %file could not be copied, because the destination directory %destination is not configured correctly.', array('%file' => $filepath, '%destination' => backdrop_realpath($directory)));
+      backdrop_set_message(t('The specified file %file could not be copied, because the destination directory is not properly configured. This may be caused by a problem with file or directory permissions. More information is available in the system log.', array('%file' => $filepath)), 'error');
       return;
     }
 
@@ -279,9 +279,9 @@ function theme_filefield_source_attach_element($variables) {
     $size = !empty($element['filename']['#size']) ? ' size="' . $element['filename']['#size'] . '"' : '';
     _form_set_class($element['filename'], array('form-select'));
     $multiple = !empty($element['#multiple']);
-    $output = '<select name="'. $element['filename']['#name'] .''. ($multiple ? '[]' : '') .'"'. ($multiple ? ' multiple="multiple" ' : '') . drupal_attributes($element['filename']['#attributes']) .' id="'. $element['filename']['#id'] .'" '. $size .'>'. form_select_options($element['filename']) .'</select>';
+    $output = '<select name="'. $element['filename']['#name'] .''. ($multiple ? '[]' : '') .'"'. ($multiple ? ' multiple="multiple" ' : '') . backdrop_attributes($element['filename']['#attributes']) .' id="'. $element['filename']['#id'] .'" '. $size .'>'. form_select_options($element['filename']) .'</select>';
   }
-  $output .= drupal_render($element['attach']);
+  $output .= backdrop_render($element['attach']);
   $element['#children'] = $output;
   return '<div class="filefield-source filefield-source-attach clear-block">' . theme('form_element', array('element' => $element)) . '</div>';
 }

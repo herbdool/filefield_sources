@@ -118,8 +118,8 @@ function filefield_source_remote_value($element, &$item) {
     // Check that the destination is writable.
     $temporary_directory = 'temporary://';
     if (!file_prepare_directory($temporary_directory, FILE_MODIFY_PERMISSIONS)) {
-      watchdog('file', 'The directory %directory is not writable, because it does not have the correct permissions set.', array('%directory' => drupal_realpath($temporary_directory)));
-      drupal_set_message(t('The file could not be transferred because the temporary directory is not writable.'), 'error');
+      watchdog('file', 'The directory %directory is not writable, because it does not have the correct permissions set.', array('%directory' => backdrop_realpath($temporary_directory)));
+      backdrop_set_message(t('The file could not be transferred because the temporary directory is not writable.'), 'error');
       return;
     }
 
@@ -129,9 +129,9 @@ function filefield_source_remote_value($element, &$item) {
 
     // This first chmod check is for other systems such as S3, which don't work
     // with file_prepare_directory().
-    if (!drupal_chmod($directory, $mode) && !file_prepare_directory($directory, FILE_CREATE_DIRECTORY)) {
-      watchdog('file', 'File %file could not be copied, because the destination directory %destination is not configured correctly.', array('%file' => $url, '%destination' => drupal_realpath($directory)));
-      drupal_set_message(t('The specified file %file could not be copied, because the destination directory is not properly configured. This may be caused by a problem with file or directory permissions. More information is available in the system log.', array('%file' => $url)), 'error');
+    if (!backdrop_chmod($directory, $mode) && !file_prepare_directory($directory, FILE_CREATE_DIRECTORY)) {
+      watchdog('file', 'File %file could not be copied, because the destination directory %destination is not configured correctly.', array('%file' => $url, '%destination' => backdrop_realpath($directory)));
+      backdrop_set_message(t('The specified file %file could not be copied, because the destination directory is not properly configured. This may be caused by a problem with file or directory permissions. More information is available in the system log.', array('%file' => $url)), 'error');
       return;
     }
 
@@ -293,8 +293,8 @@ function _filefield_source_remote_filename($curl_filename = NULL) {
 function _filefield_source_remote_mime_extension($curl_mime_type = NULL) {
   static $extension = NULL;
   if (isset($curl_mime_type)) {
-    include_once DRUPAL_ROOT . '/includes/file.mimetypes.inc';
-    $curl_mime_type = drupal_strtolower($curl_mime_type);
+    include_once backdrop_ROOT . '/includes/file.mimetypes.inc';
+    $curl_mime_type = backdrop_strtolower($curl_mime_type);
     $mapping = file_mimetype_mapping();
     // See if this matches a known MIME type.
     $map_id = array_search($curl_mime_type, $mapping['mimetypes']);
@@ -327,7 +327,7 @@ function filefield_source_remote_progress($entity_type, $bundle_name, $field_nam
     $progress['percentage'] = round(100 * $current / $total);
   }
 
-  drupal_json_output($progress);
+  backdrop_json_output($progress);
 }
 
 /**
@@ -390,7 +390,7 @@ function filefield_source_remote_get_transfer_options() {
 function theme_filefield_source_remote_element($variables) {
   $element = $variables['element'];
 
-  $element['url']['#field_suffix'] = drupal_render($element['transfer']);
-  return '<div class="filefield-source filefield-source-remote clear-block">' . drupal_render($element['url']) . '</div>';
+  $element['url']['#field_suffix'] = backdrop_render($element['transfer']);
+  return '<div class="filefield-source filefield-source-remote clear-block">' . backdrop_render($element['url']) . '</div>';
 }
 

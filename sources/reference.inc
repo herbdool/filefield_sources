@@ -84,7 +84,7 @@ function filefield_source_reference_settings($op, $instance) {
         '1' => t('Contains string'),
       ),
       '#type' => 'radios',
-      '#default_value' => isset($settings['source_reference']['autocomplete']) ? $settings['source_reference']['autocomplete'] : '0', 
+      '#default_value' => isset($settings['source_reference']['autocomplete']) ? $settings['source_reference']['autocomplete'] : '0',
     );
   }
   elseif ($op == 'save') {
@@ -176,7 +176,7 @@ function filefield_source_reference_autocomplete($entity_type, $bundle_name, $fi
     }
   }
 
-  drupal_json_output($items);
+  backdrop_json_output($items);
 }
 
 /**
@@ -198,8 +198,8 @@ function theme_filefield_source_reference_autocomplete_item($variables) {
 function theme_filefield_source_reference_element($variables) {
   $element = $variables['element'];
 
-  $element['autocomplete']['#field_suffix'] = drupal_render($element['select']);
-  return '<div class="filefield-source filefield-source-reference clear-block">' . drupal_render($element['autocomplete']) . '</div>';
+  $element['autocomplete']['#field_suffix'] = backdrop_render($element['select']);
+  return '<div class="filefield-source filefield-source-reference clear-block">' . backdrop_render($element['autocomplete']) . '</div>';
 }
 
 /**

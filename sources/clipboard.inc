@@ -108,8 +108,8 @@ function filefield_source_clipboard_value(&$element, &$item) {
     // Check that the destination is writable.
     $temporary_directory = 'temporary://';
     if (!file_prepare_directory($temporary_directory, FILE_MODIFY_PERMISSIONS)) {
-      watchdog('file', 'The directory %directory is not writable, because it does not have the correct permissions set.', array('%directory' => drupal_realpath($temporary_directory)));
-      drupal_set_message(t('The file could not be transferred because the temporary directory is not writable.'), 'error');
+      watchdog('file', 'The directory %directory is not writable, because it does not have the correct permissions set.', array('%directory' => backdrop_realpath($temporary_directory)));
+      backdrop_set_message(t('The file could not be transferred because the temporary directory is not writable.'), 'error');
       return;
     }
     // Check that the destination is writable.
@@ -118,9 +118,9 @@ function filefield_source_clipboard_value(&$element, &$item) {
 
     // This first chmod check is for other systems such as S3, which don't work
     // with file_prepare_directory().
-    if (!drupal_chmod($directory, $mode) && !file_prepare_directory($directory, FILE_CREATE_DIRECTORY)) {
-      watchdog('file', 'File %file could not be copied, because the destination directory %destination is not configured correctly.', array('%file' => $url, '%destination' => drupal_realpath($directory)));
-      drupal_set_message(t('The specified file %file could not be copied, because the destination directory is not properly configured. This may be caused by a problem with file or directory permissions. More information is available in the system log.', array('%file' => $url)), 'error');
+    if (!backdrop_chmod($directory, $mode) && !file_prepare_directory($directory, FILE_CREATE_DIRECTORY)) {
+      watchdog('file', 'File %file could not be copied, because the destination directory %destination is not configured correctly.', array('%file' => $url, '%destination' => backdrop_realpath($directory)));
+      backdrop_set_message(t('The specified file %file could not be copied, because the destination directory is not properly configured. This may be caused by a problem with file or directory permissions. More information is available in the system log.', array('%file' => $url)), 'error');
       return;
     }
 
@@ -165,7 +165,7 @@ function filefield_source_clipboard_page($entity_type, $bundle_name, $field_name
 
   // Check access.
   if (!$instance = field_info_instance($entity_type, $field_name, $bundle_name)) {
-    return drupal_access_denied();
+    return backdrop_access_denied();
   }
   $field = field_info_field($field_name);
 
@@ -180,8 +180,8 @@ function theme_filefield_source_clipboard_element($variables) {
   $element = $variables['element'];
 
   $capture = '<div class="filefield-source-clipboard-capture" contenteditable="true"><span class="hint">example_filename.png</span></div>';
-  $element['#field_suffix'] = drupal_render($element['upload']) . ' <span class="hint">' . t('ctrl + v') . '</span>';
+  $element['#field_suffix'] = backdrop_render($element['upload']) . ' <span class="hint">' . t('ctrl + v') . '</span>';
   $element['#description'] = t('Enter a file name and paste an image from the clipboard. This feature only works in <a href="http://drupal.org/node/1775902">limited browsers</a>.');
-  $element['#children'] = $capture . drupal_render_children($element);
+  $element['#children'] = $capture . backdrop_render_children($element);
   return '<div class="filefield-source filefield-source-clipboard clear-block">' . theme('form_element', array('element' => $element)) . '</div>';
 }

@@ -19,7 +19,7 @@ function filefield_sources_install() {
 function filefield_sources_update_6001() {
   $ret = array();
 
-  drupal_load('module', 'content');
+  backdrop_load('module', 'content');
   module_load_include('inc', 'content', 'includes/content.crud');
 
   foreach (content_fields() as $field) {

@@ -400,7 +400,7 @@ function filefield_sources_includes($include = TRUE, $enabled_only = TRUE, $inst
     if (!$enabled_only || (isset($enabled_includes) && in_array($file->name, $enabled_includes))) {
       $includes[] = $file->name;
       if ($include) {
-        include_once(backdrop_ROOT . '/' . $file->uri);
+        include_once(BACKDROP_ROOT . '/' . $file->uri);
       }
     }
   }

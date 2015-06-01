@@ -293,7 +293,7 @@ function _filefield_source_remote_filename($curl_filename = NULL) {
 function _filefield_source_remote_mime_extension($curl_mime_type = NULL) {
   static $extension = NULL;
   if (isset($curl_mime_type)) {
-    include_once backdrop_ROOT . '/includes/file.mimetypes.inc';
+    include_once BACKDROP_ROOT . '/includes/file.mimetypes.inc';
     $curl_mime_type = backdrop_strtolower($curl_mime_type);
     $mapping = file_mimetype_mapping();
     // See if this matches a known MIME type.

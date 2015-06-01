@@ -5,7 +5,7 @@ FileField Sources
 Description
 -----------
 FileField Sources is a module that enhances the generic and image upload fields
-in Drupal. Typically such fields only allow you to upload a file from your
+in Backdrop. Typically such fields only allow you to upload a file from your
 desktop. FileField Sources makes it so that you can populate any file field
 from a variety of sources, such as entering remote URLs directly, re-use
 existing uploaded files, pull from a server directory, or a variety of other
@@ -19,7 +19,7 @@ Installation
 1) Place this module directory in your modules folder (this will usually be
    "sites/all/modules/").
 
-2) Enable the module within your Drupal site.
+2) Enable the module within your Backdrop site.
 
 3) Add or configure an existing file or image field. To configure a typical node
    field, visit Admin -> Structure -> Content types and click "manage fields"
@@ -33,6 +33,5 @@ Installation
 
 Support
 -------
-Please file bug reports in the FileField Sources issue queue. Do not use the
-Drupal.org forums or send bug reports via e-mail.
-http://drupal.org/project/issues/filefield_sources?categories=All
+Please file bug reports in the FileField Sources issue queue on GitHub.
+http://github.com/backdrop-contrib/filefield_sources/issues

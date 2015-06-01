@@ -3,8 +3,8 @@
 /**
  * Behavior to add source options to configured fields.
  */
-Drupal.behaviors.fileFieldSources = {};
-Drupal.behaviors.fileFieldSources.attach = function(context, settings) {
+Backdrop.behaviors.fileFieldSources = {};
+Backdrop.behaviors.fileFieldSources.attach = function(context, settings) {
   $('div.filefield-sources-list:not(.filefield-sources-processed)', context).each(function() {
     $(this).addClass('filefield-sources-processed');
     var $fileFieldElement = $(this).parents('div.form-managed-file:first');
@@ -28,19 +28,19 @@ Drupal.behaviors.fileFieldSources.attach = function(context, settings) {
 
       // Add the active class.
       $(this).addClass('active');
-      Drupal.fileFieldSources.updateHintText($fileFieldElement.get(0));
+      Backdrop.fileFieldSources.updateHintText($fileFieldElement.get(0));
     }).first().triggerHandler('click');
 
     // Clipboard support.
     $fileFieldElement.find('.filefield-source-clipboard-capture')
-      .bind('paste', Drupal.fileFieldSources.pasteEvent)
-      .bind('focus', Drupal.fileFieldSources.pasteFocus)
-      .bind('blur', Drupal.fileFieldSources.pasteBlur);
+      .bind('paste', Backdrop.fileFieldSources.pasteEvent)
+      .bind('focus', Backdrop.fileFieldSources.pasteFocus)
+      .bind('blur', Backdrop.fileFieldSources.pasteBlur);
   });
 
   if (context === document) {
     $('form').submit(function() {
-      Drupal.fileFieldSources.removeHintText();
+      Backdrop.fileFieldSources.removeHintText();
     });
   }
 };
@@ -48,7 +48,7 @@ Drupal.behaviors.fileFieldSources.attach = function(context, settings) {
 /**
  * Helper functions used by FileField Sources.
  */
-Drupal.fileFieldSources = {
+Backdrop.fileFieldSources = {
   /**
    * Update the hint text when clicking between source types.
    */
@@ -59,7 +59,7 @@ Drupal.fileFieldSources = {
       var sourceType = matches[1];
       var defaultText = '';
       var textfield = $(this).find('input.form-text:first').get(0);
-      var defaultText = (Drupal.settings.fileFieldSources && Drupal.settings.fileFieldSources[sourceType]) ? Drupal.settings.fileFieldSources[sourceType].hintText : '';
+      var defaultText = (Backdrop.settings.fileFieldSources && Backdrop.settings.fileFieldSources[sourceType]) ? Backdrop.settings.fileFieldSources[sourceType].hintText : '';
 
       // If the field doesn't exist, just return.
       if (!textfield) {
@@ -144,11 +144,11 @@ Drupal.fileFieldSources = {
     }
     // Firefox with content editable pastes as img tag with data href.
     else if ($.browser.mozilla) {
-      Drupal.fileFieldSources.waitForPaste(targetElement);
+      Backdrop.fileFieldSources.waitForPaste(targetElement);
       return true;
     }
     else {
-      Drupal.fileFieldSources.pasteError(targetElement, Drupal.t('Paste from clipboard not supported in this browser.'));
+      Backdrop.fileFieldSources.pasteError(targetElement, Backdrop.t('Paste from clipboard not supported in this browser.'));
       return false;
     }
 
@@ -164,10 +164,10 @@ Drupal.fileFieldSources = {
         var fileReader = new FileReader();
         // Define events to fire after the file is read into memory.
         fileReader.onload = function() {
-          Drupal.fileFieldSources.pasteSubmit(targetElement, filename, this.result);
+          Backdrop.fileFieldSources.pasteSubmit(targetElement, filename, this.result);
         };
         fileReader.onerror = function() {
-          Drupal.fileFieldSources.pasteError(targetElement, Drupal.t('Error reading file from clipboard.'));
+          Backdrop.fileFieldSources.pasteError(targetElement, Backdrop.t('Error reading file from clipboard.'));
         };
         // Read in the file to fire the above events.
         fileReader.readAsDataURL(fileBlob);
@@ -180,7 +180,7 @@ Drupal.fileFieldSources = {
       //}
     }
     if (!fileFound) {
-      Drupal.fileFieldSources.pasteError(targetElement, Drupal.t('No file in clipboard.'));
+      Backdrop.fileFieldSources.pasteError(targetElement, Backdrop.t('No file in clipboard.'));
     }
     return false;
   },
@@ -193,17 +193,17 @@ Drupal.fileFieldSources = {
       var filename = targetElement.firstChild ? targetElement.firstChild.textContent : '';
       var tagFound = false;
       $(targetElement).find('img[src^="data:image"]').each(function(n, element) {
-        Drupal.fileFieldSources.pasteSubmit(targetElement, filename, element.src);
+        Backdrop.fileFieldSources.pasteSubmit(targetElement, filename, element.src);
         tagFound = true;
       });
       $(targetElement).html(filename);
       if (!tagFound) {
-        Drupal.fileFieldSources.pasteError(targetElement, Drupal.t('No file in clipboard.'));
+        Backdrop.fileFieldSources.pasteError(targetElement, Backdrop.t('No file in clipboard.'));
       }
     }
     else {
       setTimeout(function() {
-        Drupal.fileFieldSources.waitForPaste(targetElement);
+        Backdrop.fileFieldSources.waitForPaste(targetElement);
       }, 200);
     }
   },

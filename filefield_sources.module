@@ -545,7 +545,7 @@ function filefield_sources_save_file($filepath, $validators = array(), $destinat
     return FALSE;
   }
 
-  // Move uploaded files from PHP's upload_tmp_dir to Drupal's temporary
+  // Move uploaded files from PHP's upload_tmp_dir to Backdrop's temporary
   // directory. This overcomes open_basedir restrictions for future file
   // operations.
   $file->uri = $file->destination;

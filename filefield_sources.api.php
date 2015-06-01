@@ -10,7 +10,7 @@
 /**
  * Returns a list of widgets that are compatible with FileField Sources.
  *
- * FileField Sources works with the most common widgets used with Drupal (the
+ * FileField Sources works with the most common widgets used with Backdrop (the
  * standard Image and File widgets). Any module that provides another widget
  * for uploading files may add compatibility with FileField Sources by
  * implementing this hook and returning the widgets that their module supports.
@@ -27,7 +27,7 @@ function hook_filefield_sources_widgets() {
  * source must be enabled by the end user before it can be used on a file field.
  * Note that the ability to provide a configuration for this source is not
  * directly provided by FileField Sources, instead you may implement the
- * form_alter() hooks provided by Drupal core to add your options to the
+ * form_alter() hooks provided by Backdrop core to add your options to the
  * existing list of FileField Source options.
  */
 function hook_filefield_sources_info() {

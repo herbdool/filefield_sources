@@ -300,7 +300,7 @@ function _filefield_source_remote_mime_extension($curl_mime_type = NULL) {
     $map_id = array_search($curl_mime_type, $mapping['mimetypes']);
     if ($map_id !== FALSE) {
       // If we have a match, get this list of likely extensions. For some reason
-      // Drupal lists the "most common" extension last for most file types
+      // Backdrop lists the "most common" extension last for most file types
       // including php, jpg, and doc.
       if ($extensions = array_keys($mapping['extensions'], $map_id)) {
         $extension = end($extensions);

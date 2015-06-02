@@ -14,7 +14,6 @@
  */
 function filefield_source_imce_info() {
   $source = array();
-  dpm('source_info');
   if (!module_exists('imce') || !imce_access()) {
     return $source;
   }

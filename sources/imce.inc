@@ -98,7 +98,6 @@ function filefield_source_imce_settings($op, $instance) {
  * A #process callback to extend the filefield_widget element type.
  */
 function filefield_source_imce_process($element, &$form_state, $form) {
-  dpm('test');
   $instance = field_widget_instance($element, $form_state);
 
   $element['filefield_imce'] = array(

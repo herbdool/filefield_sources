@@ -25,5 +25,5 @@ This module built by Robots: http://www.lullabot.com
 Originally written for Drupal by
 * Nate Haug (https://github.com/quicksketch/)
 
-Converted to Backdrop by 
-* Jerad Bitner (https://github.com/sirkitree)
+Converted to Backdrop by
+* Jerad Bitner (https://github.com/sirkitree/)

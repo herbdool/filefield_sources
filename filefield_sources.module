@@ -386,12 +386,12 @@ function filefield_sources_filefield_sources_info() {
  */
 function filefield_sources_includes($include = TRUE, $enabled_only = TRUE, $instance = NULL) {
   if ($enabled_only) {
-    $enabled_includes = filefield_sources_includes(FALSE, FALSE);
-    // We need the instance in order to get the file this field's config file name.
+    $default = filefield_sources_includes(FALSE, FALSE);
     if (!empty($instance) && is_array($instance[1])) {
       $config_file = 'field.instance.' . $instance[1]['entity_type'] . '.' . $instance[1]['bundle'] . '.' . $instance[1]['field_name'];
-      $enabled_includes = config_get($config_file, 'filefield_sources');
+      $config = config_get($config_file, 'filefield_sources');
     }
+    $enabled_includes = isset($config) ? $config : $default;
   }
 
   $includes = array();

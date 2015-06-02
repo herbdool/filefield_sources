@@ -215,7 +215,7 @@ function filefield_source_imce_page($entity_type, $bundle_name, $field_name) {
   // Disable absolute URLs.
   $conf['imce_settings_absurls'] = 0;
 
-  module_load_include('inc', 'imce', 'inc/imce.page');
+  module_load_include('inc', 'imce', 'includes/imce.page');
   return imce($field['settings']['uri_scheme']);
 }
 

@@ -30,11 +30,6 @@ https://github.com/backdrop-contrib/filefield_sources/wiki/Documentation
 Bugs and Feature requests should be reported in the Issue Queue:
 https://github.com/backdrop-contrib/fixteaserlinks/issues
 
-## License
-
-This project is GPL v2 software. See the LICENSE.txt file in this directory for
-complete text.
-
 ## Current Maintainers
 
 This module is currently seeking maintainers.
@@ -46,3 +41,8 @@ This module built by Robots: http://www.lullabot.com
 Originally written for Drupal by Nate Haug (https://github.com/quicksketch)
 
 Converted to Backdrop by Jerad Bitner (https://github.com/sirkitree)
+
+## License
+
+This project is GPL v2 software. See the LICENSE.txt file in this directory for
+complete text.

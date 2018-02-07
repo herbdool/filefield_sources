@@ -261,7 +261,9 @@ function filefield_source_remote_value($element, &$item) {
     }
 
     // Delete the temporary file.
-    @unlink($filepath);
+    if ($filepath !== $item['uri']) {
+      @unlink($filepath);
+    }
   }
 }
 

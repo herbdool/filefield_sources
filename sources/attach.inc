@@ -188,6 +188,7 @@ function filefield_source_attach_process($element, &$form_state, $form) {
        'method' => 'replace',
        'effect' => 'fade',
     ),
+    '#access' => !isset($attach_message),
   );
 
   return $element;
@@ -251,7 +252,7 @@ function filefield_source_attach_value($element, &$item) {
       $item = array_merge($item, (array) $file);
 
       // Delete the original file if "moving" the file instead of copying.
-      if ($filepath != $original_filepath && $instance['widget']['settings']['filefield_sources']['source_attach']['attach_mode'] !== 'copy') {
+      if (drupal_realpath($filepath) !== drupal_realpath($file->uri) && $instance['widget']['settings']['filefield_sources']['source_attach']['attach_mode'] !== 'copy') {
         @unlink($filepath);
       }
     }

@@ -144,7 +144,7 @@ function filefield_source_attach_process($element, &$form_state, $form) {
     $form_state['filefield_sources'][$instance['field_name']]['attach_options'] = $options;
   }
 
-  $description = t('This method may be used to attach files that exceed the file size limit. Files may be attached from the %directory directory on the server, usually uploaded through FTP.', array('%directory' => realpath($path)));
+  $description = t('This method may be used to attach files that exceed the file size limit. Files may be attached from the %directory directory on the server, usually uploaded through FTP.', array('%directory' => drupal_realpath($path)));
 
   // Error messages.
   if ($options === FALSE || empty($settings['path'])) {

@@ -149,6 +149,9 @@ function filefield_source_remote_value($element, &$item) {
     curl_setopt($ch, CURLOPT_HEADERFUNCTION, '_filefield_source_remote_parse_header');
     // Causes a warning if PHP safe mode is on.
     @curl_setopt($ch, CURLOPT_FOLLOWLOCATION, TRUE);
+    // Set a user agent - some hosts block requests unless header is present.
+    $curl_version = curl_version();
+    curl_setopt($ch,CURLOPT_USERAGENT,'PHP-curl/' . $curl_version['version']);
     curl_exec($ch);
     $info = curl_getinfo($ch);
     if ($info['http_code'] != 200) {
@@ -247,6 +250,9 @@ function filefield_source_remote_value($element, &$item) {
       curl_setopt($ch, CURLOPT_WRITEFUNCTION, 'filefield_source_remote_curl_write');
       // Causes a warning if PHP safe mode is on.
       @curl_setopt($ch, CURLOPT_FOLLOWLOCATION, TRUE);
+      // Set a user agent - some hosts block requests unless header is present.
+      $curl_version = curl_version();
+      curl_setopt($ch,CURLOPT_USERAGENT,'PHP-curl/' . $curl_version['version']);
       $transfer_success = curl_exec($ch);
       curl_close($ch);
     }

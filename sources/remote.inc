@@ -271,11 +271,11 @@ function filefield_source_remote_value($element, &$item) {
  * Parse cURL header and record the filename specified in Content-Disposition.
  */
 function _filefield_source_remote_parse_header($ch, $header) {
-  if (preg_match('/Content-Disposition:.*?filename="(.+?)"/', $header, $matches)) {
+  if (preg_match('/Content-Disposition:.*?filename="(.+?)"/i', $header, $matches)) {
     // Content-Disposition: attachment; filename="FILE NAME HERE"
     _filefield_source_remote_filename($matches[1]);
   }
-  elseif (preg_match('/Content-Disposition:.*?filename=([^; ]+)/', $header, $matches)) {
+  elseif (preg_match('/Content-Disposition:.*?filename=([^; ]+)/i', $header, $matches)) {
     // Content-Disposition: attachment; filename=file.ext
     $uri = trim($matches[1]);
     _filefield_source_remote_filename($uri);

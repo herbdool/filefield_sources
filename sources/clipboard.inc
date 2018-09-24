@@ -21,7 +21,7 @@ function filefield_source_clipboard_info() {
     'process' => 'filefield_source_clipboard_process',
     'value' => 'filefield_source_clipboard_value',
     'weight' => 1,
-    'file' => 'includes/clipboard.inc',
+    'file' => 'sources/clipboard.inc',
   );
   return $source;
 }
@@ -84,7 +84,7 @@ function filefield_source_clipboard_process($element, &$form_state, $form) {
     '#value' => t('Upload'),
     '#ajax' => array(
       'path' => 'file/ajax/' . implode('/', $element['#array_parents']) . '/' . $form['form_build_id']['#value'],
-      'wrapper' => $element['#id'] . '-ajax-wrapper',
+      'wrapper' => $element['upload_button']['#ajax']['wrapper'],
       'effect' => 'fade',
       'progress' => array(
         'type' => 'throbber',
@@ -131,7 +131,7 @@ function filefield_source_clipboard_value(&$element, &$item) {
     $file_contents = base64_decode(substr($base64_data, $comma_position + 1));
     $mimetype = substr($base64_data, 5, $semicolon_position - 5);
 
-    include_once('./includes/file.mimetypes.inc');
+    include_once BACKDROP_ROOT . '/core/includes/file.mimetypes.inc';
     $mime_mapping = file_mimetype_mapping();
     $mime_key = array_search($mimetype, $mime_mapping['mimetypes']);
     $extension = array_search($mime_key, $mime_mapping['extensions']);
@@ -153,7 +153,9 @@ function filefield_source_clipboard_value(&$element, &$item) {
     }
 
     // Remove the temporary file generated from paste.
-    @unlink($filepath);
+    if ($filepath !== $item['uri']) {
+      @unlink($filepath);
+    }
   }
 }
 

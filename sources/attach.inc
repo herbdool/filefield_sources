@@ -64,12 +64,10 @@ function filefield_source_attach_settings($op, $instance) {
       '#maxlength' => 128,
       '#description' => t('The directory within the <em>File attach location</em> that will contain attachable files.'),
     );
-    if (module_exists('token')) {
-      $return['source_attach']['tokens'] = array(
-        '#theme' => 'token_tree',
-        '#token_types' => array('user'),
-      );
-    }
+    $return['source_attach']['tokens'] = array(
+      '#theme' => 'token_tree',
+      '#token_types' => array('user'),
+    );
     $return['source_attach']['absolute'] = array(
       '#type' => 'radios',
       '#title' => t('File attach location'),
@@ -296,9 +294,7 @@ function _filefield_source_attach_directory($instance, $account = NULL) {
   // Replace user level tokens.
   // Node level tokens require a lot of complexity like temporary storage
   // locations when values don't exist. See the filefield_paths module.
-  if (module_exists('token')) {
-    $path = token_replace($path, array('user' => $account));
-  }
+  $path = token_replace($path, array('user' => $account));
 
   return $absolute ? $path : file_default_scheme() . '://' . $path;
 }

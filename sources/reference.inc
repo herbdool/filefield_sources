@@ -122,6 +122,8 @@ function filefield_source_reference_process($element, &$form_state, $form) {
     '#description' => filefield_sources_element_validation_help($element['#upload_validators']),
   );
 
+  $ajax_path = 'file/ajax/' . implode('/', $element['#array_parents']) . '/' . $form['form_build_id']['#value'];
+  $token = backdrop_hmac_base64($ajax_path, backdrop_get_private_key() . backdrop_get_hash_salt());
   $element['filefield_reference']['select'] = array(
     '#name' => implode('_', $element['#array_parents']) . '_autocomplete_select',
     '#type' => 'submit',
@@ -131,7 +133,7 @@ function filefield_source_reference_process($element, &$form_state, $form) {
     '#name' => $element['#name'] . '[filefield_reference][button]',
     '#limit_validation_errors' => array($element['#parents']),
     '#ajax' => array(
-      'path' => 'file/ajax/' . implode('/', $element['#array_parents']) . '/' . $form['form_build_id']['#value'],
+      'path' => $ajax_path . '/' . $token,
       'wrapper' => $element['upload_button']['#ajax']['wrapper'],
       'effect' => 'fade',
     ),
